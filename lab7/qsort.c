@@ -17,7 +17,7 @@ int isEmpty(stack* x)
 {
 	if(x->top == -1)
 	{
-	printf("tr\t");
+	//printf("tr\t");
 	return 1;
 	}
 	else
@@ -96,7 +96,7 @@ int partition(record s[], int low,int high)
 	 return right;
 }	
 
-record* quicksort(record s[],int size,int thresh)//thresh = size of sublist
+void quicksort(record s[],int size,int thresh)//thresh = size of sublist
 {
 	stack* x = create_stack(x);
 	pair t;
@@ -109,11 +109,11 @@ record* quicksort(record s[],int size,int thresh)//thresh = size of sublist
 	
 		t = topele(x);
 		pop(x);
-		printf("t1 = %d %d\t",t.low,t.high);	
+		//printf("t1 = %d %d\t",t.low,t.high);	
 	
 		int high = t.high;
 		int low = t.low;
-		printf("t val = %d %d",t.low,t.high); 
+	//	printf("t val = %d %d",t.low,t.high); 
 		if(high-low+1<thresh)
 		{
 			continue;
@@ -138,17 +138,17 @@ record* quicksort(record s[],int size,int thresh)//thresh = size of sublist
 //printf("\n");
 
 	}
-		printf("\nStarting\n");
+/*		printf("\nStarting\n");
 
 	for(int i=0;i<size;i++)
 	{
 		printf("%s %ld\n",s[i].name , s[i].empid);
 	}
-
-	return s;
+*/
+	//return s;
 }	
 
-record* insertionsort(record a[],int size)
+void insertionsort(record a[],int size)
 {
 	int i = 0,j;
 	for(int i=1;i<size;i++)
@@ -162,5 +162,5 @@ record* insertionsort(record a[],int size)
 		}
 		a[j+1]=key;
 	}
-	return a;
+//	return a;
 }

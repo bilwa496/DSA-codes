@@ -24,7 +24,7 @@ typedef struct stack stack;
 typedef struct pair pair;
 
 typedef struct record record;
-extern record* quicksort(record s[],int n,int thresh);
+extern void quicksort(record s[],int n,int thresh);
 extern stack* create_stack();
 extern int isEmpty(stack* x);
 extern int isFull(stack* x);
@@ -34,5 +34,5 @@ extern pair topele(stack* x);
 extern stack* resize(stack* x);
 extern int partition(record arr[], int low,int high);
 
-extern record* insertionsort(record a[],int size);
+extern void insertionsort(record a[],int size);
 #endif
