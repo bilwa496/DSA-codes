@@ -2,6 +2,7 @@
 #define _records
 #include <stdio.h>
 #include <stdlib.h>
+
 struct Record
 {
 	int size;
@@ -15,5 +16,9 @@ typedef struct Record record;
 extern record* createarray();
 extern void insertion_sort(record* arr,int n);
 extern  void insertinroder(record* arr,record* x,int n);
+extern void printArray(record* arr,int num);
+extern void insertelements(record* arr, record x,int num);
+extern record* resize(record* arr,int num);
+
 #endif
 

@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "record.h"
-static int num=0;
+
 record* createarray()
 {
 	record* arr= (record*)(malloc(sizeof(record)*5));
@@ -10,7 +10,7 @@ record* createarray()
 	return arr;
 }
 
-bool isFull(record* arr)
+bool isFull(record* arr,int num)
 {
 
 	if(num<=arr->size)
@@ -21,26 +21,26 @@ bool isFull(record* arr)
 		return true;
 }
 
-record* resize(record* arr)
+record* resize(record* arr,int num)
 {
-	if(isFull(arr))
+	if(isFull(arr,num))
 	{
-		arr = (record*) (realloc(arr,sizeof(record)*arr->size*2));
-		arr->size*=2;
+		arr->size = arr->size*2;
+		arr = (record*) (realloc(arr,(sizeof(record)*arr->size)*2));
 	}
 	return arr;
 }
-record* insertelements(record* arr, record x)
+void insertelements(record* arr, record x,int num)
 {
 	
 		if(num>=arr->size)
 		{
-			arr = resize(arr);
+			arr = resize(arr,num);
 		}
 		else
 		{
 			(arr+num)->card_no = x.card_no;
-			strcpy(x.card_no,(arr+num)->bank_code);
+			strcpy(x.bank_code,(arr+num)->bank_code);
 			(arr+num)->expiry_month = x.expiry_month;
 			(arr+num)->expiry_year = x.expiry_year;
 			strcpy((arr+num)->first_name,x.first_name);
@@ -68,8 +68,7 @@ void insertion_sort(record* arr,int n)
 	{
 		return ;
 	}
-	else
-	{
+	
 	insertion_sort(arr,n-1);
 	record key = *(arr+n-1);
 	int j = n-2;
@@ -79,11 +78,25 @@ void insertion_sort(record* arr,int n)
 	j--;
 	}
 	*(arr+j+1) = key;
-	record *x = (arr+n-1);
+	printArray(arr,n);
+	//record *x = (arr+n-1);
 		//insertinorder(arr,x,(n-1));
+	
+}
+void printArray(record* arr,int num)
+{
+	printf("\n Starting\n");
+	for(int i=0;i<num;i++)
+	{
+	printf("%llu %s %u %u %s %s \n",(arr+i)->card_no,(arr+i)->bank_code,(arr+i)->expiry_month,(arr+i)->expiry_year,(arr+i)->first_name,(arr+i)->last_name);
 	}
 }
-		
   
 		
-	
+/*	int size;
+	long long unsigned card_no;
+	char bank_code[16];
+	unsigned int expiry_month, expiry_year; 
+	char first_name[50];
+	char last_name[50];
+*/	
