@@ -21,7 +21,7 @@ int main()
 {
 	q();
 }
-/*Expirment with the positions of the function
+/*Experiment with the positions of the function
 Use size ./a.out to see the memory layout
 Points worth oting:
 Each function has a stack off which the static variables are being allocated. When the function end is reached the stack is popped and emptied for the function.
