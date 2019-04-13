@@ -11,100 +11,214 @@ node* tree_construct()
 	root->value = NULL;
 	return root;
 }
-
-node* treeinsert(char *name, char* ip,node* root)
+node* insert(char** terms,int k node* root)
 {
-	int n1,n2;
-	n1 = strlen(name);
-	n2 = strlen(ip);
-	char **x;
-	//printf("reached");
-	x =(char**) malloc(sizeof(char*)*n1);
-	for(int i=0;i<n1;i++)
-	{
-		x[i] = (char*)(malloc(sizeof(char)*30));
-	}
-	 int j = 0;
-	 int k=0;
-	//tokenizing
-	int i = n1-1;
-	while(i>=0)
-	{	while(name[i]!='.' && i>=0)
-		{
-		//printf("%d %d %d\t", k ,j ,i);
-				x[k][j] = name[i];
-				j++;
-				i--;
-		}
-			char tname[j+1];
-		//reversing the string
-		if(name[i] == '.')
-		{
-			int end = j-1;
-			int l =0;
-			for(l=0;l<j+1;l++)
-			{
-				tname[l] = x[k][end];
-				end--;
-			}
-			tname[l]='\0';
-			strcpy(x[k],tname);
-			//printf("%s %d \t",x[k],k);
-			 j = 0;
-			 k++;
-			 i--;
-		}
-	}
-	//root = root->child;
-	node* temp = root->child;
+	node* current = root->child;
+	node* prev = root->child;
+	node* levelcurrent,levelprev;
+	//k is size of terms array
+	int i=0;
+	//base case
 	int level = 1;
-	node* prev = root;
-	if(temp == NULL)
+	if(current==NULL)
 	{
-		while(k>=level)
-			{
-				temp = (node*)(malloc(sizeof(node)));
-				temp->value = (char*)(malloc(sizeof(char)*strlen(x[level-1])));
-				strcpy(temp->value,x[level-1]);
-				prev->child = temp;
-				prev = temp;
-				temp = temp->child;
-				level++;
-			}
+	for(int i=0;i<k;i++)
+	{
+		node* newnode = (node*)(malloc(sizeof(node)));
+		strcpy(newnode->value,terms[i]);
+		newnode->child = NULL;
+		newnode->sibling = NULL;
+		prev->child = newnode;
+		current = newnode;
+		prev = current;
+		current = current->child;		
+	}
+			node* newnode = malloc(sizeof(node));
+			newnode->value = (char*)(malloc(sizeof(char)*(1+strlen(ip))));
+			newnode->value =ip;
+			newnode->child = NULL;
+			newnode->sibling = NULL;
+		//	printf("ip = %s",ip);
+			prev->child = newnode;
 	}
 	else
 	{
-
-			
+	 levelcurrent = current;
+	 levelprev = current;
+	while(k>=level)
+	{
+	while(levelcurrent!=NULL)
+	{
+		if (strcmp(levelcurrent->value,x[level-1])!=0)
+		{
+			levelprev = levelcurrent;
+			levelcurrent = levelcurrent->sibling;
 		}
+		else if (strcmp(levelcurrent->value,x[level-1])==0)
+		{
+			levelprev = levelcurrent;
+			prev = levelprev;
+			temp = levelcurrent->child;
+			levelcurrent = levelcurrent->child;
+			level++;
+			continue;
+		}
+	}
+	if(levelcurrent==NULL)
+	{
+		node* newnode =(node*)(malloc(sizeof(node)));
+		newnode->value = (char*)(malloc(sizeof(char)*(strlen(x[level-1]+1)));
+		newnode->child= NULL;
+		newnode->sibling = NULL;
+		strcpy(newnode->value,x[level-1]);
+		levelprev->sibling = newnode;
+		levelcurrent = newnode;
+		temp = levelcurrent;
+		prev = temp;
+		temp = temp->child;
 		while(temp==NULL && level<=k)
 		{
-			node* newnode= malloc(sizeof(node));
+			node* newnode = malloc(sizeof(node));
 			prev->child = newnode;
 			temp = newnode->child;
-			newnode->value = (char*)(malloc(sizeof(char)*strlen(x[level-1])));
-			strcpy(newnode->value,x[level-1]);
-			prev = newnode;
-			level++;
+			newnode->value = (char*)(malloc(sizeof(char)*(strlen(x[level-1]+1)));
+			strcopy(newnode->value,x[level-1]);
+			newnode->child =NULL;
+			newnode->sibling = NULL;
+			prev= newnode;
+			current = newnode->child;
+			level++;		
 		}
 	}
-	return root;	
+	}
+			node* newnode = malloc(sizeof(node));
+			newnode->value = (char*)(malloc(sizeof(char)*(1+strlen(ip))));
+			newnode->value =ip;
+			newnode->child = NULL;
+			newnode->sibling = NULL;
+		//	printf("ip = %s",ip);
+			prev->child = newnode;
+	}
+	 return root;	
 }
-//Print all the nodes
-void printData(node* root)
+void find(char* name,node* root)
 {
-	printf("%s ", root->value);
-	if(root->sibling)
+	int i=0,j=0,k=0;
+	char** x;
+	x = (char**)(malloc(sizeof(char*)*strlen(name)+1));
+	for(int i=0;i<strlen(name);i++)
 	{
-		printData(root->sibling);
+		x[i] = (char*)(malloc(sizeof(char)*100));
 	}
-	printf("\n");
-	if(root->child)
+	int n = strlen(name);
+	int i = n-1;
+	int k=0;
+	while(i>=0)
 	{
-		printData(root->child);
+		while(name[i]!= '.' && i>=0)
+		{
+		x[k][j] = name[i];
+		i--;
+		j++;
+		}
+		
+		if(name[i] == '.' && i>=0)
+		{
+			char tname[j];
+			for(int l=0;l<j;l++)
+			{
+				tname[l] = x[k][l];
+			}	
+			for(int l=0;l<j;l++)
+			{
+				x[k][l]=tname[j-l-i];
+			}
+			
+			i--;
+			k++;
+			j=0;
+		}
 	}
+	int level=1;
+	node* current = root->child;
+	node* levelcurrent;
+	int flag = 0;
+	while(k>=level)
+	{
+		levelcurrent = current;
+		while(levelcurrent)
+		{
+			if(strcmp(levelcurrent->value, x[level-1])!=0 )
+			{
+				levelcurrent = levelcurrent->sibling;
+			}
+			else
+			{
+				current = current->child;
+				levelcurrent = current;
+				level++;
+			}
+		}
+		if(levelcurrent==NULL && k<level)
+		{
+		printf("Not Found\n");
+		}
+		else
+		{
+			printf("Found\n");		
+		}
+
+	}
+	
 }
-void readData(FILE* fptr,node* root)
+node* splitdns(char* name, char* ip, node* root)
+{
+	int i=0,j=0,k=0;
+	char** x;
+	x = (char**)(malloc(sizeof(char*)*strlen(name)+1));
+	for(int i=0;i<strlen(name);i++)
+	{
+		x[i] = (char*)(malloc(sizeof(char)*100));
+	}
+	int n = strlen(name);
+	int i = n-1;
+	int k=0;
+	while(i>=0)
+	{
+		while(name[i]!= '.' && i>=0)
+		{
+		x[k][j] = name[i];
+		i--;
+		j++;
+		}
+		
+		if(name[i] == '.' && i>=0)
+		{
+			char tname[j];
+			for(int l=0;l<j;l++)
+			{
+				tname[l] = x[k][l];
+			}	
+			for(int l=0;l<j;l++)
+			{
+				x[k][l]=tname[j-l-i];
+			}
+			
+			i--;
+			k++;
+			j=0;
+		}
+	}
+	root = treeinsert(x,k,root);
+	return root;
+}
+
+
+node* treeinsert(char *name, char* ip,node* root)
+{
+
+}
+node* readData(FILE* fptr,node* root)
 {
 
 	int n;
@@ -114,7 +228,7 @@ void readData(FILE* fptr,node* root)
 	for(int i=0;i<n;i++)
 	{
 		fscanf(fptr,"%s %s\n",name[i],ip[i]);
-				printf("%s %s\n",name[i],ip[i]);
+	//			printf("%s %s\n",name[i],ip[i]);
 		/*if(root->value==NULL)
 		{
 		printf("Exists!");		
@@ -122,52 +236,18 @@ void readData(FILE* fptr,node* root)
 		else
 			printf("DNE");*/
 
-		treeinsert(name[i],ip[i],root);
+		root = treeinsert(name[i],ip[i],root);
 	}
+	return root;
 }
 void search_tree(node* root, char* name)
-{
-	int n1 = strlen(name);
-	char **x;
-	x =(char**) malloc(sizeof(char*)*n1);
-	for(int i=0;i<n1;i++)
-	{
-		x[i] = (char*)(malloc(sizeof(char)*30));
-	}
-	 int j = 0;
-	 int k=0;
-	//tokenizing
-	for(int i=n1-1;i>=0;i--)
-	{
-	
-		while(name[i]!='.')
-		{
-				x[k][j] = name[i];
-				j++;
-		}
-		char tname[j];
-		//reversing the string
-		if(name[i] == '.')
-		{
-		
-			for(int l=0;l<j;l++)
-			{
-				tname[j-l-1] = x[k][l];
-			}
-			for(int l=0;l<n1;l++)
-			{
-				x[k][l] = tname[l];
-			}
-			 j = n1-1;
-			 k++;
-		}
-	}
-	
+{	
 }	
 void lookup(FILE* fp,node* root)
 {
 	char name[1000];
 	fscanf(fp,"%s\n",name);
+	//printf("\t%s\t",name);
 	search_tree(root,name);
 	//write the search function
 }
@@ -184,11 +264,19 @@ int main()
 	if(x==1)
 	{ 
 		root = tree_construct();
-		readData(fptr,root);
+		root = readData(fptr,root);
+		node* temp = root->child;
+		while(temp)
+		{
+		printf("%s ", temp->value);
+		temp = temp->sibling;
+		}
 	}
 	else if(x==2)
 	{
-		lookup(fptr,root);
+	//printData(root);
+
+	//	lookup(fptr,root);
 	}
 	else if(x==-1)
 		return 0;
